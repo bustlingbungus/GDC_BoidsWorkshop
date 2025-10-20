@@ -5,7 +5,7 @@ using System;
 
 public class BoidManager : MonoBehaviour
 {
-    List<BoidOptimized> boids;
+    List<Boid> boids;
 
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] float turnSpeed = 180f;
@@ -21,10 +21,10 @@ public class BoidManager : MonoBehaviour
     {
         // get all boid objects, and get their boid component, save to array
         GameObject[] all_boids = GameObject.FindGameObjectsWithTag("Boid");
-        boids = new List<BoidOptimized>();
+        boids = new List<Boid>();
         for (int i = 0; i < all_boids.Length; ++i)
         {
-            BoidOptimized b = all_boids[i].GetComponent<BoidOptimized>();
+            Boid b = all_boids[i].GetComponent<Boid>();
             boids.Add(b);
         }
     }
@@ -34,13 +34,13 @@ public class BoidManager : MonoBehaviour
     {
         turnSpeedRad = turnSpeed * Mathf.Deg2Rad;
 
-        foreach (BoidOptimized b1 in boids)
+        foreach (Boid b1 in boids)
         {
             // reset each boid to prepare for new calculations
             b1.Reset();
 
             // react to every other boid in the scene
-            foreach (BoidOptimized b2 in boids)
+            foreach (Boid b2 in boids)
             {
                 // dont react if current boid is self, or if it is too far
                 if (b2 == b1) continue;

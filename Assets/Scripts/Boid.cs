@@ -4,7 +4,7 @@ using UnityEngine.Scripting.APIUpdating;
 using System;
 using UnityEngine.UIElements;
 
-public class BoidOptimized : MonoBehaviour
+public class Boid : MonoBehaviour
 {
     /* How quickly the boid moves forwards (m/s) */
     [HideInInspector] public float movementSpeed = 5f;
