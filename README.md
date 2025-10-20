@@ -2,6 +2,8 @@
 
 This repository showcases an implementation of the Boids algorithm in a simple scene in Unity. This project was created to be showcased at the October 11, 2025 Boids workshop, hosted by [USF GameDev Club](https://discord.gg/7cgvAnCjh9). 
 
+For the workshop, [this](https://docs.google.com/presentation/d/101f-DelqCzXztEln4r-AvMynie_lQU8fVodgok7Sw2E/edit?slide=id.g39b7ab9b8ed_0_18#slide=id.g39b7ab9b8ed_0_18) short powerpoint was used.
+
 ## Optimization
 
 The project contains two versions of the algorithm: `Boid.cs`, which is more intuitive, and is what will be presented at the workshop. There is also `BoidOptimized.cs` and `BoidManager.cs`, which is a more refined version of the algorithm, that should run faster, and has lower memory complexity (O(n), down from O(n<sup>2</sup>)).
