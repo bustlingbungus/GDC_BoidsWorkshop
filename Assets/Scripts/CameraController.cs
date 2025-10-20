@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Net.Sockets;
 using NUnit.Framework.Constraints;
+using UnityEditor.Search;
 using UnityEngine;
 
 
@@ -19,6 +23,15 @@ public class CameraController : MonoBehaviour
     float curr_x_rotation = 0f;
 
 
+    /* List of all game object, to facilitate locking onto boids */
+    List<GameObject> boids = null;
+
+    /* Whether or not we use manual camera control */
+    bool manual_camera = false;
+
+    /* How far to trail behind flock of boids */
+    [SerializeField] float boidFollowDist = 10f;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,15 +42,25 @@ public class CameraController : MonoBehaviour
 
         // initial camera rotation
         curr_x_rotation = transform.rotation.eulerAngles.x;
+
+        // get references to all boids
+        boids = new List<GameObject>(GameObject.FindGameObjectsWithTag("Boid"));
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        LookAround();
-        Move();
-        UpDownMotion();
+        if (manual_camera)
+        {
+            LookAround();
+            Move();
+            UpDownMotion();
+        }
+        else FollowBoids();
+
+        // toggle manual camera
+        if (Input.GetMouseButtonDown(0)) manual_camera = !manual_camera;
     }
 
 
@@ -93,5 +116,22 @@ public class CameraController : MonoBehaviour
             transform.position += new Vector3(0f, moveSpeed * Time.deltaTime, 0f);
         if (Input.GetKey(KeyCode.C))
             transform.position -= new Vector3(0f, moveSpeed * Time.deltaTime, 0f);
+    }
+
+    void FollowBoids()
+    {
+        // find average position of boids
+        Vector3 avgPos = Vector3.zero;
+        foreach (GameObject b in boids) avgPos += b.transform.position;
+        avgPos /= boids.Count;
+
+        Vector3 dir = (transform.position - avgPos).normalized;
+
+        // move towards fixed distance from boids
+        Vector3 targetPos = avgPos + (dir * boidFollowDist);
+        transform.position = Vector3.Lerp(transform.position, targetPos, 0.9f);
+
+        // look towards average position
+        transform.forward = Vector3.Lerp(transform.forward, -dir, 0.9f);
     }
 }
